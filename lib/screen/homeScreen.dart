@@ -41,17 +41,12 @@ class _Game_HomeState extends State<Game_Home> {
                     //   onWillAccept: (data) => data == "facebook",
                     //
                     // ),
-
-                    DragTarget_Widget('facebook',"Facebook","assets/facebook.png",control.isFacebook.value),
-                    DragTarget_Widget('youtube',"Youtube","assets/youtube.png",control.isYoutube.value),
-                    DragTarget_Widget('whatsapp',"WhatsApp","assets/whatsapp.png",control.isYoutube.value),
-                    DragTarget_Widget('twitter',"Twitter","assets/twitter.png",control.isYoutube.value),
-                    DragTarget_Widget('instagram',"Instagram","assets/instagram.png",control.isYoutube.value),
-
-
+                    DragTarget_Widget('facebook',"Facebook","assets/facebook.png",control.isFacebook),
+                    DragTarget_Widget('youtube',"Youtube","assets/youtube.png",control.isYoutube),
+                    DragTarget_Widget('whatsapp',"WhatsApp","assets/whatsapp.png",control.isWhatsApp),
+                    DragTarget_Widget('twitter',"Twitter","assets/twitter.png",control.isTwitter),
+                    DragTarget_Widget('instagram',"Instagram","assets/instagram.png",control.isInstagram),
                   ],
-
-
                 ),
               ),
               Container(
@@ -67,12 +62,11 @@ class _Game_HomeState extends State<Game_Home> {
                     //       feedback: LogoTabTile("assets/facebook.png"),
                     //     ),
                     // ),
-                    Draggble_Widget(LogoTabTile("assets/facebook.png"),"facebook",control.isFacebook.value),
-                    Draggble_Widget(LogoTabTile("assets/instagram.png"),"instagram",control.isInstagram.value),
-                    Draggble_Widget(LogoTabTile("assets/twitter.png"),"twitter",control.isTwitter.value),
-                    Draggble_Widget(LogoTabTile("assets/whatsapp.png"),"whatsapp",control.isWhatsApp.value),
-                    Draggble_Widget(LogoTabTile("assets/youtube.png"),"youtube",control.isYoutube.value),
-
+                    Draggble_Widget(LogoTabTile("assets/facebook.png"),"facebook",control.isFacebook),
+                    Draggble_Widget(LogoTabTile("assets/instagram.png"),"instagram",control.isInstagram),
+                    Draggble_Widget(LogoTabTile("assets/twitter.png"),"twitter",control.isTwitter),
+                    Draggble_Widget(LogoTabTile("assets/whatsapp.png"),"whatsapp",control.isWhatsApp),
+                    Draggble_Widget(LogoTabTile("assets/youtube.png"),"youtube",control.isYoutube),
                   ],
                 ),
               )
@@ -84,29 +78,26 @@ class _Game_HomeState extends State<Game_Home> {
     );
   }
 
-  Widget DragTarget_Widget(String dataDrag,String title,String imgPath,bool variable) {
+  Widget DragTarget_Widget(String dataDrag,String title,String imgPath,RxBool variable) {
     return DragTarget(builder: (context, candidateData, rejectedData) {
-                    return variable == true ?
+                    return variable.value == true ?
                       RightBox(title, imgPath) :
                     NullBox(title);
                   },
-                    onAccept: (data) => variable = true,
+                    onAccept: (data) => variable.value = true,
                     onWillAccept: (data) => dataDrag == data,
-
                   );
   }
 
-  Widget Draggble_Widget(Widget widget,String dataDrag,bool variable) {
-    return  Draggable(
-                data: dataDrag,
-                child: variable == true ? Container() : widget,
-                feedback: widget,
-                childWhenDragging: Container(),
-      
-
-
-    );
-
+  Widget Draggble_Widget(Widget widget,String dataDrag,RxBool variable) {
+    return
+        Obx(() => Draggable(
+                  data: dataDrag,
+                  child: variable.value == true ? Container() : widget,
+                  feedback: widget,
+                  childWhenDragging: Container(),
+    ),
+        );
   }
 
   Widget LogoTabTile(String imgpath)
@@ -153,6 +144,7 @@ class _Game_HomeState extends State<Game_Home> {
       ],
     );
   }
+
 
 }
 
